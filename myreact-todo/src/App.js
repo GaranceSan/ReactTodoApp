@@ -3,20 +3,31 @@ import { useState } from "react";
 
 function App() {
   const [trucs, setTrucs] = useState([]);
+  console.log(trucs);
   return (
     <>
       <div className="app-wrapper">
         <hi>Liste des trucs urgentissimes : </hi>
-      </div>
-      <Form
-        addTrucMuche={(truc) => {
-          setTrucs((prev) => [...prev, truc]);
-        }}
-      />
-      <div className="tasks-list">
-        {trucs.map((truc, index) => (
-          <Todo key={index}>{truc}</Todo>
-        ))}
+
+        <Form
+          addTrucMuche={(task) => {
+            setTrucs((prev) => [...prev, task]);
+          }}
+        />
+        <div className="tasks-list">
+          {trucs.map((task, index) => (
+            <Todo
+              onDelete={() => {
+                setTrucs((prev) => {
+                  return prev.filter((_, y) => index !== y);
+                });
+              }}
+              key={index}
+            >
+              {task}
+            </Todo>
+          ))}
+        </div>
       </div>
     </>
   );
@@ -25,6 +36,7 @@ function App() {
 function Form({ addTrucMuche }) {
   const onSubmit = (e) => {
     e.preventDefault();
+
     const trucText = e.currentTarget.elements.task.value;
     addTrucMuche(trucText);
     console.log({ trucText });
@@ -42,10 +54,14 @@ function Form({ addTrucMuche }) {
   );
 }
 
-function Todo() {
+function Todo({ onDelete, children }) {
   return (
     <div>
       <Checkbox />
+      <span className="task-details">{children}</span>
+      <button onClick={onDelete} className="taskDelete">
+        p
+      </button>
     </div>
   );
 }
