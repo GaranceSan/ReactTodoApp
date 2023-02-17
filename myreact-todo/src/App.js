@@ -1,5 +1,6 @@
 import "./App.css";
 import { useState } from "react";
+import { FiTrash } from "react-icons/fi";
 
 function App() {
   const [trucs, setTrucs] = useState([]);
@@ -17,15 +18,14 @@ function App() {
         <div className="tasks-list">
           {trucs.map((task, index) => (
             <Todo
+              key={index}
               onDelete={() => {
                 setTrucs((prev) => {
                   return prev.filter((_, y) => index !== y);
                 });
               }}
-              key={index}
-            >
-              {task}
-            </Todo>
+              task={task}
+            />
           ))}
         </div>
       </div>
@@ -39,6 +39,7 @@ function Form({ addTrucMuche }) {
 
     const trucText = e.currentTarget.elements.task.value;
     addTrucMuche(trucText);
+    e.currentTarget.reset();
     console.log({ trucText });
   };
   return (
@@ -54,13 +55,13 @@ function Form({ addTrucMuche }) {
   );
 }
 
-function Todo({ onDelete, children }) {
+function Todo({ onDelete, task }) {
   return (
-    <div>
+    <div className="task-item">
       <Checkbox />
-      <span className="task-details">{children}</span>
-      <button onClick={onDelete} className="taskDelete">
-        p
+      <span className="task-details">{task}</span>
+      <button onClick={onDelete} className="task-delete">
+        <FiTrash />
       </button>
     </div>
   );
